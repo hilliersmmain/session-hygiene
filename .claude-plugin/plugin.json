@@ -1,0 +1,10 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "session-hygiene",
+  "version": "0.1.0",
+  "description": "Skills for keeping a Claude Code session honest: take stock from evidence, park detours as prompt files, wrap up into the right instruction file, audit startup context",
+  "author": {
+    "name": "Sam Hillier",
+    "email": "223534211+hilliersmmain@users.noreply.github.com"
+  }
+}
