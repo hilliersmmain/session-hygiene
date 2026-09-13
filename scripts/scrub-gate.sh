@@ -18,8 +18,8 @@ cd "$(dirname "$0")/.."
 #   .claude-plugin/*.json  author / owner name, public by design
 #   LICENSE                copyright holder, public by design
 #   scripts/scrub-gate.sh  this file — it contains the patterns, so it matches itself
-# NEXT-SESSION.md is deliberately NOT excluded: it ships with the repo, so it is gated like
-# everything else. It was rewritten public-safe on 2026-09-13 rather than exempted.
+# Prompts/*.md is deliberately NOT excluded: those files ship with the repo, so they are gated
+# like everything else. The queued prompt was written public-safe on 2026-09-13, not exempted.
 EXCLUDE='^(\.claude-plugin/.*\.json|LICENSE|scripts/scrub-gate\.sh)$'
 
 # 'hilliersm\b' deliberately does NOT match the GitHub handle 'hilliersmmain', which is public

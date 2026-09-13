@@ -20,7 +20,7 @@ Written down because a check you trust for more than it does is worse than no ch
 
 | Check | Goes red for | Does **not** catch |
 |---|---|---|
-| `scripts/scrub-gate.sh` | any scrub pattern in a tracked file, `NEXT-SESSION.md` included | untracked files (by design — gate what ships) |
+| `scripts/scrub-gate.sh` | any scrub pattern in a tracked file, `Prompts/` included | untracked files (by design — gate what ships) |
 | plugin manifest, strict | unknown/unrecognized fields, manifest errors | `marketplace.json` — a separate manifest, hence check 3 |
 | marketplace manifest, strict | missing `owner`, missing description, bad `plugins[]` | — |
 | components, strict | missing frontmatter, missing `description` | **invalid skill `name`** (spaces, capitals), **`name` not matching its directory**, **malformed `allowed-tools`** — all three passed validation |
