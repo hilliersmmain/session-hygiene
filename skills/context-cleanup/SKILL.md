@@ -123,7 +123,9 @@ the same directory whose `pwd`-derived `<slug>` Step 1a uses for the transcript 
    crossing one means *schedule a review*, not *demote or refuse*. What replaces a hard
    ceiling is **Step 6, the drift audit** — run that. If a file is genuinely sprawling,
    demote stories to a reference directory, don't squeeze.
-   `for f in ~/.claude/CLAUDE.md ~/CLAUDE.md ~/Projects/*/CLAUDE.md; do printf '%4d %s\n' "$(wc -l <"$f")" "$f"; done`
+   `find ~ -name CLAUDE.md -not -path '*/plugins/*' -not -path '*/node_modules/*' 2>/dev/null | while read -r f; do printf '%4d %s\n' "$(wc -l <"$f")" "$f"; done`
+   (Not a `~/Projects/*` glob — projects live under different roots on different machines, and
+   a glob that matches nothing returns a clean-looking but empty audit.)
 2. **Memory store** — the index file loads every session; the individual memory bodies do
    not, so tighten the index first. If the user's CLAUDE.md sets a recommended length for it,
    read that from there too. **The honest caveat, kept because it argues against the
@@ -152,7 +154,8 @@ m --settings '{"enabledPlugins":{"some-plugin@marketplace":false}}'
 This skill does not touch config itself. It outputs the proposed change as a diff plus the
 exact commands to apply it, and the user runs them:
 
-- Back up first: `cp ~/.claude/settings.json ~/.claude/backups/settings.json.bak-$(date +%F)`
+- Back up first: `mkdir -p ~/.claude/backups && cp ~/.claude/settings.json ~/.claude/backups/settings.json.bak-$(date +%F)`
+  (`cp` does not create the parent directory, and fails outright if it is missing.)
 - Edit with `jq` into a temp file, then `mv` into place, so a failure can't truncate the
   file.
 - **Propose a diff and get approval before touching CLAUDE.md** — treat it as append-only
@@ -164,8 +167,10 @@ exact commands to apply it, and the user runs them:
 ## Step 5 — Re-measure and report
 
 Report **actual vs. predicted** for each change. If a lever underdelivers, say so and
-correct the record in `reference/settings-keys.md` — a lever that was measured as useless
-must not be proposed again next time.
+record that where the user's own notes live, not in `reference/settings-keys.md` — that file
+ships inside the plugin, so it is read-only in a normal install and is overwritten on the next
+update. A lever measured as useless must not be proposed again next time, which means writing
+it somewhere that survives.
 
 ## Step 6 — Drift audit: are the always-loaded files still *true*?
 
@@ -183,7 +188,7 @@ mechanical proving command:
 |---|---|
 | a path or file exists | `ls -la` on it |
 | a tool is installed | `type -t`, `dpkg-query -W` — **never `command -v`**, false positives in this tool |
-| a settings key holds a value | a fresh `Read` of the JSON (not a cached one, not a backup) — **but never flag the model-selection keys in settings.json as drift: the user changes them on purpose** |
+| a settings key holds a value | a fresh `Read` of the JSON (not a cached one, not a backup) — **confirm before flagging the model-selection keys: many people change them by hand between sessions, so ask rather than assuming intent or rot** |
 | a service or unit state | `systemctl --user status`, `flatpak override --show` |
 | a directory convention holds | glob the projects and report the **hit rate**, not a yes/no |
 | a hardware or firmware fact | the `/sys/class/dmi/id/*`, `lsblk`, `lspci` reading |

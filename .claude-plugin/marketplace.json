@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "session-hygiene",
+  "description": "A single-plugin marketplace hosting session-hygiene: four skills for keeping a long Claude Code session honest about its own state.",
+  "owner": {
+    "name": "Sam Hillier",
+    "url": "https://github.com/hilliersmmain"
+  },
+  "plugins": [
+    {
+      "name": "session-hygiene",
+      "source": "./",
+      "description": "Skills for keeping a Claude Code session honest: take stock from evidence, park detours as prompt files, wrap up into the right instruction file, audit startup context"
+    }
+  ]
+}

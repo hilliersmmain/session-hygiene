@@ -6,5 +6,16 @@
   "author": {
     "name": "Sam Hillier",
     "email": "223534211+hilliersmmain@users.noreply.github.com"
-  }
+  },
+  "license": "MIT",
+  "repository": "https://github.com/hilliersmmain/session-hygiene",
+  "keywords": [
+    "claude-code",
+    "skills",
+    "context-management",
+    "session-management",
+    "developer-workflow",
+    "productivity",
+    "documentation"
+  ]
 }
