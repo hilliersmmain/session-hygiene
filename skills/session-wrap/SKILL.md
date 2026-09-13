@@ -4,28 +4,33 @@ description: Use when the user says "wrap up", "session wrap", or "update CLAUDE
 disable-model-invocation: true
 ---
 
+# session-wrap
+
 Manually invoked, never auto-run. **Run it BEFORE compacting.** It reviews the session's
 conversation, and compaction destroys the exact wording, corrections and verifications it
 needs; after compaction it produces a vaguer, less useful diff.
 
-## Delegation — always dispatch
+## Delegation — a split, not a hand-off
 
-**Always run this as a subagent, never inline.** Pass the model explicitly on the Agent
-call; never pin one in a skill.
+**Step 3 runs inline; Steps 1, 2 and 4-6 run in a subagent.** Pass the model explicitly on
+the Agent call; never pin one in a skill.
 
-This is a split, not a hand-off of the whole skill:
+The split is the point, because only one half needs the conversation:
 
 - **The orchestrator does Step 3 itself, before compacting** (the reason this skill runs
   pre-compaction at all) — it reviews its own conversation and writes a findings file, sorted
   by the Step 1 table's targets (global CLAUDE.md items, reference-file stories under a named
-  heading, project-file items, memory items), to `~/.claude/plans/`.
+  heading, project-file items, memory items), to
+  `~/.claude/plans/<YYYY-MM-DD>-<cwd-basename>-findings.md`. Run
+  `mkdir -p ~/.claude/plans` first — the directory is not guaranteed to exist, and a write
+  into a missing parent fails.
 - **The subagent has no conversation to review.** It gets that findings file plus the exact
   cwd and the exact memory-store path (never let it guess or derive the path), and runs
   Steps 1, 2, 4, 5, 6 against it: re-read every target from disk, cross-check each proposed
   item against what's actually live (parallel sessions write these files too, and a findings
   file can predate another session's edit), run the drift check, and write a
-  `...findings.proposals.md` sibling file. It saves memory items normally (not gated) but
-  applies nothing to any CLAUDE.md and does not touch the reference files either — proposals
+  sibling file at the same path with `.proposals.md` in place of `.md`. It saves memory
+  items normally (not gated) but applies nothing to any CLAUDE.md and does not touch the reference files either — proposals
   only, for the user to approve.
 
 ## Step 1 — Where am I, and which files may this session touch?
@@ -107,8 +112,10 @@ project lines, one memory" is a good result; never invent an addition to have ou
 - **A line states a stable fact or a pointer, never a volatile value.** If a command or a
   parallel session can rewrite it, name the command that reports it and don't quote the
   value. Example of the shape: the kernel line says "check `uname -r`" rather than a version.
-- **Never report the model-selection keys in settings.json as drift; the user changes them
-  by hand and on purpose.**
+- **Confirm before reporting the model-selection keys in settings.json as drift.** They are
+  commonly changed by hand between sessions, so a difference there is usually intent, not rot —
+  but for someone who does not change them, an unexpected change is exactly what is worth
+  flagging. Ask; do not assume either way.
 - Never write "settled, stop re-checking" into any of these files. A rule that closes a
   question *and* forbids re-checking survives being wrong forever. Write **"verified X on
   DATE — re-check if it matters"**. Both stop the nagging; only one stays falsifiable.

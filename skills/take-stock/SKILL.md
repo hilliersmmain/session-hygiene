@@ -1,7 +1,7 @@
 ---
 name: take-stock
 description: Use when the user asks "what's left", "where are we", "what have we actually got", or wants to regroup, pause, or resume after a break — even offhand, or after a context compaction, since a sense of what is done is the thing that drifts.
-allowed-tools: Read, Glob, Grep, Bash(git log:*), Bash(git status:*), Bash(find:*), Bash(wc:*), Bash(ls:*)
+allowed-tools: Read, Glob, Grep, Bash
 ---
 
 # Take stock
@@ -140,7 +140,12 @@ session and it is often the whole reason the next step is now unblocked.
 memory?"* and runs at the end. This one answers *"where does the work actually
 stand right now?"* and runs mid-flight, when the user has lost the thread and
 work is about to continue. If the user wants durable rules captured rather than
-an orientation, use that skill instead.
+an orientation, say so and let them run it — `session-wrap` sets
+`disable-model-invocation`, so it starts only when a person asks for it.
+
+`session-hygiene:context-cleanup` also talks about "drift", but a different one: it audits
+whether the always-loaded instruction files are still *true*. This skill audits whether the
+*work status* is still true. Same word, different subject.
 
 Do not use this to re-plan, re-litigate settled decisions, or restart
 brainstorming. It is a report on reality, and it ends with the user knowing what

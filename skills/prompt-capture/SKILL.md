@@ -38,9 +38,10 @@ preparation.
 
 Three findings mean **don't write one**. Say which, and drop it:
 
-- **An existing plan already owns it.** Check the target repo's `NEXT-SESSION.md`, `docs/`,
-  and `~/.claude/plans/` before writing. A prompt file that duplicates a milestone already
-  scoped in a repo is two sources of truth for one job. If the job genuinely has a
+- **An existing plan already owns it.** Check whatever plan or handoff notes the repo
+  already keeps — a `docs/` plan, a next-session file, an issue tracker — before writing. A
+  prompt file that duplicates a milestone already scoped in a repo is two sources of truth
+  for one job. If the job genuinely has a
   machine-level slice that the repo plan does not cover, narrow the prompt to that slice and
   say so in its first paragraph — don't quietly restate the whole milestone.
 - **It isn't actually out-of-repo.** Work that touches only files in the current project is
@@ -158,11 +159,13 @@ below. The shape:
 5. **What to settle with the user** — a recommendation each with its trade-off named, never a
    bare menu.
 6. **House rules that actually bite this job.** The `sudo`-has-no-TTY batched paste block;
-   never `curl | sudo bash`; back up before rewriting; `type -t` not `command -v`; let the
-   user type the steps that are theirs to learn. Only the ones that apply — a job with no
-   privileged step says so instead of carrying a paste-block rule it doesn't need.
-7. **The close.** Run `session-hygiene:session-wrap`, then a paste-ready line saying how to
-   resume: the literal launch command and which file to paste next.
+   never `curl | sudo bash`; back up before rewriting; `type -t` not `command -v`; and any
+   house rule the user's own CLAUDE.md states about who performs which steps. Only the ones
+   that apply — a job with no privileged step says so instead of carrying a paste-block rule
+   it doesn't need.
+7. **The close.** A short line naming what finishing this job unblocks, so whoever runs it
+   knows when they are done. Nothing about how to launch a session — that belongs in the
+   reply, not the file.
 
 **Prompt text only.** No launch command, no model line, no status table, no commentary before
 or after — the user select-alls and pastes the whole file. Context for *them* goes in your
@@ -181,7 +184,7 @@ Writing it is not evidence it is right. Re-read the file from disk and check:
 
 - every `[unverifiable]` row from the table appears in the file as an instruction
 - it opens as a prompt, not as a note about a prompt
-- nothing about the model is quoted anywhere except the closing line
+- nothing about the model, the launch command or the session is quoted anywhere
 
 Then tell the user it exists, in one line, and return to the task that was interrupted. Going
 back to the original work is the whole point — the file is a side effect, not a new project.
